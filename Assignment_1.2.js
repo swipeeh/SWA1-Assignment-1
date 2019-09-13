@@ -12,7 +12,7 @@ class Precipitation extends WeatherData{
 class Wind extends WeatherData{
     direction(){}
 }
-class CloudCoverage extends WeatherData{
+class CloudCoverage extends WeatherData {
 
 }
 
@@ -23,6 +23,7 @@ class WeatherPrediction{
     }
 }
 class temperaturePrediction extends WeatherPrediction{
+    //Questionable
     constructor(C) {this.C = C}
     getPrediction() {return this.C}
     setPrediction(C) {this.C = C}
@@ -36,7 +37,7 @@ class WindPrediction extends WeatherPrediction{
     matches (data) {this.data = data}
 }
 class CloudCoveragePrediction extends WeatherPrediction{
-
+    
 }
 
 //WeatherFOrecast Class
