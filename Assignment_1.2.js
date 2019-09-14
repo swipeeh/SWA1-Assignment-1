@@ -41,3 +41,21 @@ class CloudCoveragePrediction extends WeatherPrediction{
 }
 
 //WeatherFOrecast Class
+class WeatherForecast{
+    constructor(place,type,period){
+        this.place = place
+        this.type = type
+        this.period = period
+    }
+    WeatherReport(data) {this.data = data}
+    getCurrentPlace() {return this.place}
+    setCurrentPlace(place) {this.place = place}
+    clearCurrentPlace() {this.place = ''}
+    getCurrentType() {return this.type}
+    setCurrentType(type) {this.type = type}
+    clearCurrentType() {this.type = ''}
+    getCurrentPeriod() {return this.period}
+    setCurrentPeriod(period) {this.period = period}
+    clearCurrentPeriod() {this.period = ' '}
+    
+}
