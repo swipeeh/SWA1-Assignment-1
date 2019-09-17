@@ -57,5 +57,4 @@ class WeatherForecast{
     getCurrentPeriod() {return this.period}
     setCurrentPeriod(period) {this.period = period}
     clearCurrentPeriod() {this.period = ' '}
-    
 }
