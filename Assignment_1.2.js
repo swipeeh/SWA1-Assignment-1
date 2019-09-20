@@ -5,10 +5,21 @@ class WeatherData{
     }
 }
 class Temperature extends WeatherData{
+    constructor(value,F,C){
+        super(value)
+        this.F = F
+        this.C = C
+    }
     convertToF(F,C) { return "Convertion C to F" + (C*1.8)+32}
     convertToC(F,C) { return "Convertion F to C" + (F-32)/1.8 }
 }
 class Precipitation extends WeatherData{
+    constructor(value,ptype,mm,inch){
+        super(value)
+        this.ptype = ptype
+        this.mm = mm 
+        this.inch = inch
+    }
     precipitationType(ptype){
         this.ptype = ptype
     }
@@ -20,10 +31,30 @@ class Precipitation extends WeatherData{
     }
 }
 class Wind extends WeatherData{
-    direction(){}
+    constructor(value,N,W,S,E){
+        super(value)
+        this.N = N
+        this.W = W
+        this.S = S
+        this.E = E  
+    }
+    direction(N,W,S,E){
+        this.N = N
+        this.W = W
+        this.S = S
+        this.E = E
+    }
+    convertToMPH(km){
+        return "Convention KM to MPH"+ km*0.6213711922
+    }
+    convertToMS(MPH){
+        return "Convention MPH to MS" + MPH/2.2369
+    }
 }
 class CloudCoverage extends WeatherData {
-
+    constructor(value){
+        super(value)
+    }
 }
 
 //WeatherPrediction Inharitance
