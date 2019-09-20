@@ -141,3 +141,9 @@ class Event{
     setPlace(place){this.place = place}
     getPlace(){return this.place}
 }
+
+class DateInterval{
+constructor(d){this.d = d}
+from(){ return Date.now()}
+to(d){this.d = d}
+}
