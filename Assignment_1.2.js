@@ -5,13 +5,21 @@ class WeatherData{
     }
 }
 class Temperature extends WeatherData{
-    convertToF(F,C) {this.F = (C*1.8)+32}
-    convertToC(F,C) {this.C = (F-32)/1.8}
+    convertToF(F,C) { return "Convertion C to F" + (C*1.8)+32}
+    convertToC(F,C) { return "Convertion F to C" + (F-32)/1.8 }
 }
 class Precipitation extends WeatherData{
-    precipitationType(){}
+    precipitationType(ptype){
+        this.ptype = ptype
+    }
+    converToInches(mm){
+        return "Convertion mm to inches"+ mm*0.039370
+    }
+    convertToMm(inch){
+        return "Convertion inches to mm" + inch*25.4
+    }
 }
-class Wind extends WeatherData extends DataType , Event{
+class Wind extends WeatherData{
     direction(){}
 }
 class CloudCoverage extends WeatherData {
@@ -20,7 +28,7 @@ class CloudCoverage extends WeatherData {
 
 //WeatherPrediction Inharitance
 class WeatherPrediction extends DataType , Event{
-    matche(data){
+    matches(data){
         return this.data
     }
 }
@@ -60,7 +68,7 @@ class WeatherForecast{
     setCurrentPeriod(period) {this.period = period}
     clearCurrentPeriod() {this.period = ' '}
 }
-
+//super classes for weatherdata and weatherprediction
 class DataType{
     constructor(type, unit){
         this.type = type
