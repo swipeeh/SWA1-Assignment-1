@@ -99,6 +99,7 @@ class WindPrediction extends WeatherPrediction{
 }
 
 class CloudCoveragePrediction extends WeatherPrediction{
+    constructor(value){super(value)}
 }
 
 //WeatherFOrecast Class
