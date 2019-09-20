@@ -1,3 +1,186 @@
+
+const WeatherData = function () {
+    const weatherData = Object.assign(Event(), DataType());
+    weatherData.value = function () {
+
+    }
+};
+
+const CloudCoverage = function () {
+
+};
+
+const DateInterval = function () {
+    return {
+        from: function () {
+
+        },
+        to: function () {
+
+        },
+        contains: function (d) {
+
+        }
+    }
+};
+
+const WeatherPrediction = function () {
+    return {
+        matches: function (data) {
+
+        },
+        to: function () {
+
+        },
+        from: function () {
+
+        }
+    }
+};
+
+const TemperaturePrediction = function () {
+    return {
+        convertToF: function () {
+
+        },
+        convertToC: function () {
+
+        }
+    }
+};
+
+const PrecipitationPrediction = function () {
+    return {
+        types: function () {
+
+        },
+        matches: function () {
+
+        },
+        converToInches: function () {
+
+        },
+        converToMM: function () {
+
+        }
+    }
+};
+
+const WindPrediction = function () {
+    return {
+        directions: function () {
+
+        },
+        matches: function () {
+
+        },
+        converToMPH: function () {
+
+        },
+        convertToMS: function () {
+
+        }
+    }
+};
+
+const CloudCoveragePrediction = function () {
+
+};
+
+const WeatherHistory = function () {
+    return {
+        WeatherReport: function (data) {
+
+        },
+        getCurrentPlace: function () {
+
+        },
+        setCurrentPlace: function (place) {
+
+        },
+        clearCurrentPlace: function () {
+
+        },
+        getCurrentType: function () {
+
+        },
+        setCurrentType: function () {
+
+        },
+        clearCurrentType: function () {
+
+        },
+        getCurrentPeriod: function () {
+
+        },
+        setCurrentPeriod: function () {
+
+        },
+        clearCurrentPeriod: function () {
+
+        },
+        convertToUSUnits: function () {
+
+        },
+        convertToInternationalUnits: function () {
+
+        },
+        add: function (data) {
+
+        },
+        data: function () {
+
+        }
+    }
+};
+
+const WeatherForecast = function () {
+    return {
+        WeatherReport: function (data) {
+
+        },
+        getCurrentPlace: function () {
+
+        },
+        setCurrentPlace: function (place) {
+
+        },
+        clearCurrentPlace: function () {
+
+        },
+        getCurrentType: function () {
+
+        },
+        setCurrentType: function () {
+
+        },
+        clearCurrentType: function () {
+
+        },
+        getCurrentPeriod: function () {
+
+        },
+        setCurrentPeriod: function () {
+
+        },
+        clearCurrentPeriod: function () {
+
+        },
+        convertToUSUnits: function () {
+
+        },
+        convertToInternationalUnits: function () {
+
+        },
+        add: function (data) {
+
+        },
+        data: function () {
+
+        }
+    }
+};
+
 function Event(){
     function time(date){
         var dateTime = new Date(date)
@@ -17,13 +200,6 @@ function DataType(){
         console.log("The data type unit is: " + value)
     }
     return{type,unit}
-}
-
-function WeatherData(){
-    function value(number){
-        return number;
-    }
-    return {value}
 }
 
 function Temperature(){
