@@ -146,4 +146,4 @@ class DateInterval{
 constructor(d){this.d = d}
 from(){ return Date.now()}
 to(d){this.d = d}
-}
+contains(date){if (date > from && date < to ){return true} else return false}}
