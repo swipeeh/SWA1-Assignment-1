@@ -1,6 +1,8 @@
 //WeatherData Inharitance
 class WeatherData{
-    
+    constructor(value){
+        this.value = value
+    }
 }
 class Temperature extends WeatherData{
     convertToF(F,C) {this.F = (C*1.8)+32}
