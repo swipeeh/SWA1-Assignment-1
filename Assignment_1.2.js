@@ -125,6 +125,10 @@ class DataType{
         this.type = type
         this.unit = unit
     }
+    setTime(time){this.time = time}
+    getTime(){return this.time}
+    setUnit(unit){this.unit = unit}
+    getUnit(){return this.unit}
 }
 
 class Event{
@@ -132,4 +136,8 @@ class Event{
         this.time = time
         this.place = place
     }
+    setTime(time){this.time = time}
+    getTime(){return this.time}
+    setPlace(place){this.place = place}
+    getPlace(){return this.place}
 }
