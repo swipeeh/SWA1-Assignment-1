@@ -4,6 +4,7 @@ class WeatherData{
         this.value = value
     }
 }
+
 class Temperature extends WeatherData{
     constructor(value,F,C){
         super(value)
@@ -13,6 +14,7 @@ class Temperature extends WeatherData{
     convertToF(F,C) { return "Convertion C to F" + (C*1.8)+32}
     convertToC(F,C) { return "Convertion F to C" + (F-32)/1.8 }
 }
+
 class Precipitation extends WeatherData{
     constructor(value,ptype,mm,inch){
         super(value)
@@ -20,23 +22,20 @@ class Precipitation extends WeatherData{
         this.mm = mm 
         this.inch = inch
     }
-    precipitationType(ptype){
-        this.ptype = ptype
-    }
-    converToInches(mm){
-        return "Convertion mm to inches"+ mm*0.039370
-    }
-    convertToMm(inch){
-        return "Convertion inches to mm" + inch*25.4
-    }
+    precipitationType(ptype){this.ptype = ptype}
+    converToInches(mm){return "Convertion mm to inches"+ mm*0.039370}
+    convertToMm(inch){return "Convertion inches to mm" + inch*25.4}
 }
+
 class Wind extends WeatherData{
-    constructor(value,N,W,S,E){
+    constructor(value,N,W,S,E,km,MPH){
         super(value)
         this.N = N
         this.W = W
         this.S = S
         this.E = E  
+        this.km = km
+        this.MPH = MPH
     }
     direction(N,W,S,E){
         this.N = N
@@ -44,41 +43,62 @@ class Wind extends WeatherData{
         this.S = S
         this.E = E
     }
-    convertToMPH(km){
-        return "Convention KM to MPH"+ km*0.6213711922
-    }
-    convertToMS(MPH){
-        return "Convention MPH to MS" + MPH/2.2369
-    }
+    convertToMPH(km){return "Convention KM to MPH"+ km*0.6213711922}
+    convertToMS(MPH){return "Convention MPH to MS" + MPH/2.2369}
 }
+
 class CloudCoverage extends WeatherData {
-    constructor(value){
-        super(value)
-    }
+    constructor(value){super(value)}
 }
 
 //WeatherPrediction Inharitance
 class WeatherPrediction extends DataType , Event{
-    matches(data){
-        return this.data
-    }
+    matches(data){return this.data}
 }
+
 class temperaturePrediction extends WeatherPrediction{
     //Questionable
     constructor(C) {this.C = C}
     getPrediction() {return this.C}
     setPrediction(C) {this.C = C}
 }
+
 class PrecipitationPrediction extends WeatherPrediction{
-    types() {}
+    constructor(value,type,mm,inch){
+        super(value)
+        this.type = type 
+        this.mm = mm
+        this.inch = inch
+    }
+    types() {return this.type}
     matches(data) {this.data = data}
+    converToInches(mm){return "Convertion mm to inches"+ mm*0.039370}
+    convertToMm(inch){return "Convertion inches to mm" + inch*25.4}
 }
+
 class WindPrediction extends WeatherPrediction{
-    directions(){}
+    constructor(value,data,N,W,S,E,km,MPH){
+        super(value)
+        this.data = data
+        this.N = N
+        this.W = W
+        this.S = S
+        this.E = E  
+        this.km = km
+        this.MPH = MPH
+    }
+    direction(N,W,S,E){
+        this.N = N
+        this.W = W
+        this.S = S
+        this.E = E
+    }
     matches (data) {this.data = data}
+    convertToMPH(km){return "Convention KM to MPH"+ km*0.6213711922}
+    convertToMS(MPH){return "Convention MPH to MS" + MPH/2.2369}
 }
+
 class CloudCoveragePrediction extends WeatherPrediction{
-    
 }
 
 //WeatherFOrecast Class
