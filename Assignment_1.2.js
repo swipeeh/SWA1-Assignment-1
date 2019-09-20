@@ -9,7 +9,7 @@ class Temperature extends WeatherData{
 class Precipitation extends WeatherData{
     precipitationType(){}
 }
-class Wind extends WeatherData{
+class Wind extends WeatherData extends DataType , Event{
     direction(){}
 }
 class CloudCoverage extends WeatherData {
@@ -17,7 +17,7 @@ class CloudCoverage extends WeatherData {
 }
 
 //WeatherPrediction Inharitance
-class WeatherPrediction{
+class WeatherPrediction extends DataType , Event{
     matche(data){
         return this.data
     }
@@ -57,4 +57,18 @@ class WeatherForecast{
     getCurrentPeriod() {return this.period}
     setCurrentPeriod(period) {this.period = period}
     clearCurrentPeriod() {this.period = ' '}
+}
+
+class DataType{
+    constructor(type, unit){
+        this.type = type
+        this.unit = unit
+    }
+}
+
+class Event{
+    constructor(time,place){
+        this.time = time
+        this.place = place
+    }
 }
