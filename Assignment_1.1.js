@@ -1,27 +1,33 @@
 
-const WeatherData = function () {
-    const weatherData = Object.assign(Event(), DataType());
-    weatherData.value = function () {
+function WeatherData (val, event, dataType) {
 
+    function value() {
+        return val;
     }
+    return Object.assign({}, event, dataType, {value});
 };
 
-const CloudCoverage = function () {
-
+function CloudCoverage (weatherData) {
+    function coverage() {
+        console.log("Cloud coverage is: " + weatherData.value() + "%") ;
+    }
+    return Object.assign({}, weatherData, {coverage})
 };
 
-const DateInterval = function () {
-    return {
-        from: function () {
-
-        },
-        to: function () {
-
-        },
-        contains: function (d) {
-
+function DateInterval(fromDate, toDate) {
+    function from () {
+        console.log("The starting date is: " + fromDate);
+    }
+    function to() {
+        console.log("The ending date is: " + toDate);
+    }
+    function contains(date) {
+        if (date > fromDate && date < toDate ) {
+            return true
         }
+        return false;
     }
+    return {from, to, contains}
 };
 
 const WeatherPrediction = function () {
@@ -192,54 +198,75 @@ function Event(){
     return {time,place}
 }
 
-function DataType(){
-    function type(dType){
+function DataType(dType, value){
+    function type(){
         console.log("The data type is: " + dType)
     }
-    function unit(value){
+    function unit(){
         console.log("The data type unit is: " + value)
     }
     return{type,unit}
 }
 
-function Temperature(){
-    function convertToF(c){
-        f = c * 9/5 + 32
-        return console.log("The temperature in Fahrenheit is" + f)
+function Temperature(weatherData){
+
+    let value = weatherData.value()
+    function convertToF(){
+        f = value * 9/5 + 32
+        console.log("The temperature in Fahrenheit is" + f)
     }
     function convertToC(f){
         c = (f - 32) * 5/9
-        return console.log("The temperature in Celsius is" + c)
+        console.log("The temperature in Celsius is" + c)
     }
-    return {convertToF, convertToC}
+    return Object.assign({},weatherData, {convertToF, convertToC})
 }
 
-function Precipitation(){
-    function precipitationType(type){
+function Precipitation(weatherData){
+
+    function precipitationType(){
+        let type = weatherData.type();
         return console.log("The precipitation type is: " + type)
     }
-    function convertToInches(mm){
-        inches == mm * 25.4
+    function convertToInches(){
+        inches == weatherData.value() * 25.4
         return console.log("The precipitation is: " + inches + " inches")
     }
-    function convertToMm(inches){
-        mm = inches/25.4
+    function convertToMm(){
+        mm = weatherData.value()/25.4
         return console.log("The precipitation is: " + mm + " inches")
     }
-    return {precipitationType, convertToInches, convertToMm}
+    return Object.assign({}, weatherData, {precipitationType, convertToInches, convertToMm});
 }
 
-function Wind(){
+function Wind(weatherData){
     function direction(windDirection){
-        return console.log("The direction of the wind is " + windDirection)
+        console.log("The direction of the wind is " + windDirection)
     }
-    function convertToMPH(ms){
-        mph = ms * 2.2369
-        return console.log(ms + "meters per second = " + mph + "miles per hour")
+    function convertToMPH(){
+        const ms = weatherData.value();
+        mph = weatherData.value() * 2.2369
+        console.log(ms + "meters per second = " + mph + "miles per hour")
     }
-    function convertToMS(mph){
-        ms = mph/2.2369
-        return console.log(mph + "miles per hour = " + ms + "meters per second")
+    function convertToMS(){
+        const mph = weatherData.value();
+        ms = weatherData.value()/2.2369
+        console.log(mph + "miles per hour = " + ms + "meters per second")
     }
     return {direction, convertToMPH, convertToMS}
 }
+
+let event = Event();
+let dataType = DataType();
+
+let a = WeatherData(50, event, dataType);
+let temp = Temperature(a);
+temp.convertToF();
+
+let from = new Date("1-1-2000");
+let to = new Date("3-1-2000");
+let date = new Date("2-1-2000");
+
+let aaa = DateInterval(from, to);
+console.log(aaa.contains(date));
+
