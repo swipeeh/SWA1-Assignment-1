@@ -256,15 +256,13 @@ function Temperature(weatherData){
         weatherData.setUnit("us");
         f = value * 9/5 + 32;
         console.log("The temperature in Fahrenheit is" + f)
-        }
-        else console.log("Invalid unit type")
+        //else console.log("Invalid unit type")
     }
     function convertToC(){
         weatherData.setUnit("international");
         c = (value - 32) * 5/9;
         console.log("The temperature in Celsius is" + c)
-        }
-        else console.log("Invalid unit type")
+        //else console.log("Invalid unit type")
     }
     return Object.assign({},weatherData, {convertToF, convertToC})
 }
@@ -279,13 +277,11 @@ function Precipitation(weatherData){
         weatherData.setUnit("us");
         inches == weatherData.value() * 25.4
         console.log("The precipitation is: " + inches + " inches")
-        }
     }
     function convertToMm(){
         weatherData.setUnit("international");
         mm = weatherData.value()/25.4
         console.log("The precipitation is: " + mm + " inches")
-        }
     }
     return Object.assign({}, weatherData, {precipitationType, convertToInches, convertToMm});
 }
@@ -306,8 +302,6 @@ function Wind(weatherData, windDirection){
         const mph = weatherData.value();
         ms = weatherData.value()/2.2369
         console.log(mph + "miles per hour = " + ms + "meters per second")
-        }
-    }
     return Object.assign({}, weatherData, {direction, convertToMPH, convertToMS})
 }
 
