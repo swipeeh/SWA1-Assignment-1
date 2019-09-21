@@ -99,6 +99,7 @@ class WindPrediction extends WeatherPrediction{
 }
 
 class CloudCoveragePrediction extends WeatherPrediction{
+    constructor(value){super(value)}
 }
 
 //WeatherFOrecast Class
@@ -106,7 +107,6 @@ class WeatherForecast{
     constructor(place,type,period){
         this.place = place
         this.type = type
-        this.period = period
     }
     WeatherReport(data) {this.data = data}
     getCurrentPlace() {return this.place}
@@ -115,9 +115,17 @@ class WeatherForecast{
     getCurrentType() {return this.type}
     setCurrentType(type) {this.type = type}
     clearCurrentType() {this.type = ''}
-    getCurrentPeriod() {return this.period}
-    setCurrentPeriod(period) {this.period = period}
+    getCurrentPeriod() {return DateInterval}
+    setCurrentPeriod(DateInterval) {DateInterval.from(),DateInterval.to()}
     clearCurrentPeriod() {this.period = ' '}
+    //to be finished
+    convertToUSUnits(){}
+    convertToInternationalUnits(){}
+}
+
+//WeatherHistory
+class WeatherHistory{
+//to be Finished
 }
 //super classes for weatherdata and weatherprediction
 class DataType{
@@ -146,4 +154,4 @@ class DateInterval{
 constructor(d){this.d = d}
 from(){ return Date.now()}
 to(d){this.d = d}
-}
+contains(date){if (date > from && date < to ){return true} else return false}}
