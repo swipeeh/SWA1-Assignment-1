@@ -56,16 +56,18 @@ class WeatherPrediction extends DataType , Event{
     matches(data){return this.data}
 }
 
-class temperaturePrediction extends WeatherPrediction{
+class TemperaturePrediction extends WeatherPrediction{
     //Questionable
-    constructor(C) {this.C = C}
+    constructor(C) {
+        super()
+        this.C = C}
     getPrediction() {return this.C}
     setPrediction(C) {this.C = C}
 }
 
 class PrecipitationPrediction extends WeatherPrediction{
     constructor(value,type,mm,inch){
-        super(value)
+        super()
         this.type = type 
         this.mm = mm
         this.inch = inch
@@ -125,7 +127,120 @@ class WeatherForecast{
 
 //WeatherHistory
 class WeatherHistory{
-//to be Finished
+    constructor() {
+        this.currentData = null;
+        this.currentPlace = null;
+        this.currentType = null;
+        this.currentPeriod = null;
+        this.namesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    }
+
+    WeatherReport() {
+        currentData.forEach(d => {
+            const date = d.time();
+
+            console.log("On the date " + date.getDate() + " of the " + this.namesOfMonths[date.getMonth()] + " following data was measured: " + d.type() + " with value of " + d.value() + " in the " + d.unit() + " units.");
+        });
+    }
+    getCurrentPlace() {
+        return this.currentPlace;
+    }
+    setCurrentPlace(newPlace) {
+        this.currentPlace = newPlace;
+    }
+    clearCurrentPlace() {
+        this.currentPlace = null;
+    }
+    getCurrentType() {
+        return this.currentType;
+    }
+    setCurrentType(newType) {
+        this.currentType = newType;
+    }
+    clearCurrentType() {
+        this.currentType = null;
+    }
+    getCurrentPeriod() {
+        return this.currentPeriod;
+    }
+    setCurrentPeriod(newPeriod) {
+        this.currentPeriod = newPeriod;
+    }
+    clearCurrentPeriod() {
+        this.currentPeriod = null;
+    }
+    convertToUSUnits() {
+        this.currentData.forEach(d => {
+            if(d.unit() !== "us")
+                d.setUnit("us");
+            switch (d.type()) {
+                case "temperature":
+                    d.convertToF();
+                    break;
+                case "precipitation":
+                    d.convertToInches();
+                    break;
+                case "wind":
+                    d.convertToMPH();
+            }
+        });
+    }
+    convertToInternationalUnits() {
+        this.currentData.forEach(d => {
+            if(d.unit() !== "international")
+                d.setUnit("international");
+            switch (d.type()) {
+                case "temperature":
+                    d.convertToC();
+                    break;
+                case "precipitation":
+                    d.convertToMm();
+                    break;
+                case "wind":
+                    d.convertToMS();
+            }
+        })
+    }
+    add(data) {
+        if(this.currentData === null) {
+            this.currentData = data;
+        }
+        else {
+            this.currentData = Array.concat(this.currentData, data);
+        }
+    }
+    data() {
+        let result  = null;
+        if(this.currentPlace !== null){
+            result = this.currentData.filter(d => d.place() === this.currentPlace);
+        }
+        if(this.currentType !== null && result !== null) {
+            result = result.filter(d => d.type() === this.currentType);
+        }
+        else if(this.currentType !== null) {
+            result = this.currentData.filter(d => d.type() === this.currentType);
+        }
+        if(this.currentPeriod !== null && result !== null) {
+            result = result.map(d => {
+                if(this.currentPeriod.contains(d.time())){
+                    return d;
+                }
+            });
+        }
+        else if(this.currentPeriod !== null) {
+            result = this.currentData.filter(d => {
+                if(this.currentPeriod.contains(d.time())){
+                    return d;
+                }
+            });
+        }
+        if (result === null) {
+            result = this.currentData;
+        }
+        result.forEach(d => {
+            console.log(d.time() + " " + d.type() + " " + d.value());
+        });
+    }
 }
 //super classes for weatherdata and weatherprediction
 class DataType{
@@ -150,8 +265,24 @@ class Event{
     getPlace(){return this.place}
 }
 
-class DateInterval{
-constructor(d){this.d = d}
-from(){ return Date.now()}
-to(d){this.d = d}
-contains(date){if (date > from && date < to ){return true} else return false}}
+class DateInterval {
+    constructor(fromDate, toDate) {
+        this.fromDate = fromDate
+        this.toDate = toDate
+    }
+
+    from() {
+        return this.fromDate
+    }
+
+    to() {
+        return this.toDate
+    }
+
+    contains(date) {
+        if (date > this.fromDate && date < this.toDate) {
+            return true
+        }
+        return false;
+    }
+}
