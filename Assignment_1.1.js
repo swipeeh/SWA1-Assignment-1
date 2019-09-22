@@ -68,19 +68,62 @@ function TemperaturePrediction(weatherPrediction) {
         }
         else console.log("Invalid unit type or no value provided for conversion")
     }
-    return Object.assign({},weatherData,weatherPrediction, {convertToF, convertToC})
+    return Object.assign({},weatherPrediction, {convertToF, convertToC})
 };
 
-function PrecipitationPrediction(weatherPrediction) {
+function PrecipitationPrediction(weatherPrediction, pType) {
     let data = weatherPrediction.weatherData()
     let type = weatherPrediction.dataType()
     let event = weatherPrediction.event()
+
+    function types(){
+        return pType
+    }
+
+    function matches(){
+
+    }
+    function convertToInches(){
+        if(type.unit() == "inches"){
+            return data.value() / 25.4
+        }
+        else { console.log("Invalid unit type")}
+    }
+    function convertToMM(){
+        if(type.unit() == "mm"){
+            return data.value() * 25.4
+        }
+        else { console.log("Invalid unit type")}
+    }
+    return Object.assign({}, weatherPrediction,{types, matches, convertToInches, convertToMM})
 };
 
-function WindPrediction() {
+function WindPrediction(wDirections , weatherPrediction) {
     let data = weatherPrediction.weatherData()
     let type = weatherPrediction.dataType()
     let event = weatherPrediction.event()
+
+    function directions(){
+        return wDirections
+    }
+
+    function matches(){
+
+    }
+    function convertToMPH(){
+        if(type.unit() == "mph"){
+            return data.value() * 2.2369
+        }
+        else { console.log("Invalid unit type")}
+    }
+
+    function convertToMS(){
+        if(type.unit() == "ms"){
+            return data.value() / 2.2369
+        }
+        else { console.log("Invalid unit type")}
+    }
+    return Object.assign({}, weatherPrediction,{directions, matches, convertToMPH, convertToMS})
 };
 
 function CloudCoveragePrediction (weatherPrediction) {
