@@ -11,8 +11,16 @@ class Temperature extends WeatherData{
         this.F = F
         this.C = C
     }
-    convertToF(F,C) { return "Convertion C to F" + (C*1.8)+32}
-    convertToC(F,C) { return "Convertion F to C" + (F-32)/1.8 }
+    convertToF(){
+        this.setUnit("us");
+        const f = this.value() * 9/5 + 32;
+        this.setValue(f);
+    }
+    convertToC(){
+        this.setUnit("international");
+        const c = (this.value() - 32) * 5/9;
+        this.setValue(c);
+    }
 }
 
 class Precipitation extends WeatherData{
@@ -23,8 +31,16 @@ class Precipitation extends WeatherData{
         this.inch = inch
     }
     precipitationType(ptype){this.ptype = ptype}
-    converToInches(mm){return "Convertion mm to inches"+ mm*0.039370}
-    convertToMm(inch){return "Convertion inches to mm" + inch*25.4}
+    convertToInches(){
+        this.setUnit("us");
+        const inches = this.value() * 25.4;
+        this.setValue(inches);
+    }
+    convertToMm(){
+        this.setUnit("international");
+        const mm = this.value()/25.4;
+        this.setValue(mm);
+    }
 }
 
 class Wind extends WeatherData{
@@ -43,12 +59,23 @@ class Wind extends WeatherData{
         this.S = S
         this.E = E
     }
-    convertToMPH(km){return "Convention KM to MPH"+ km*0.6213711922}
-    convertToMS(MPH){return "Convention MPH to MS" + MPH/2.2369}
+    convertToMPH(){
+        this.setUnit("us");
+        const mph = this.value() * 2.2369;
+        this.setValue(mph);
+    }
+    convertToMS() {
+        this.setUnit("international");
+        const ms = this.value() / 2.2369;
+        this.setValue(ms);
+    }
 }
 
 class CloudCoverage extends WeatherData {
     constructor(value){super(value)}
+    getCoverage() {
+        return value;
+    }
 }
 
 //WeatherPrediction Inharitance
@@ -106,23 +133,57 @@ class CloudCoveragePrediction extends WeatherPrediction{
 
 //WeatherFOrecast Class
 class WeatherForecast{
-    constructor(place,type,period){
-        this.place = place
-        this.type = type
+    constructor(){
+        this.currentData = null;
+        this.place = null;
+        this.type = null;
+        this.period = null;
     }
     WeatherReport(data) {this.data = data}
     getCurrentPlace() {return this.place}
     setCurrentPlace(place) {this.place = place}
-    clearCurrentPlace() {this.place = ''}
+    clearCurrentPlace() {this.place = null}
     getCurrentType() {return this.type}
     setCurrentType(type) {this.type = type}
-    clearCurrentType() {this.type = ''}
-    getCurrentPeriod() {return DateInterval}
-    setCurrentPeriod(DateInterval) {DateInterval.from(),DateInterval.to()}
-    clearCurrentPeriod() {this.period = ' '}
-    //to be finished
-    convertToUSUnits(){}
-    convertToInternationalUnits(){}
+    clearCurrentType() {this.type = null}
+    getCurrentPeriod() {return this.period}
+    setCurrentPeriod(newPeriod) {this.period = newPeriod}
+    clearCurrentPeriod() {this.period = null}
+    convertToUSUnits() {
+        this.currentData.forEach(d => {
+            if(d.unit() !== "us")
+                d.setUnit("us");
+            switch (d.type()) {
+                case "temperature":
+                    d.convertToF();
+                    break;
+                case "precipitation":
+                    d.convertToInches();
+                    break;
+                case "wind":
+                    d.convertToMPH();
+            }
+        });
+    }
+    convertToInternationalUnits() {
+        this.currentData.forEach(d => {
+            if(d.unit() !== "international")
+                d.setUnit("international");
+            switch (d.type()) {
+                case "temperature":
+                    d.convertToC();
+                    break;
+                case "precipitation":
+                    d.convertToMm();
+                    break;
+                case "wind":
+                    d.convertToMS();
+            }
+        })
+    }
+    data() {
+
+    }
 }
 
 //WeatherHistory
@@ -136,7 +197,7 @@ class WeatherHistory{
     }
 
     WeatherReport() {
-        currentData.forEach(d => {
+        this.currentData.forEach(d => {
             const date = d.time();
 
             console.log("On the date " + date.getDate() + " of the " + this.namesOfMonths[date.getMonth()] + " following data was measured: " + d.type() + " with value of " + d.value() + " in the " + d.unit() + " units.");
