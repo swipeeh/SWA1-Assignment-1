@@ -6,10 +6,8 @@ class WeatherData{
 }
 
 class Temperature extends WeatherData{
-    constructor(value,F,C){
+    constructor(value){
         super(value)
-        this.F = F
-        this.C = C
     }
     convertToF(){
         this.setUnit("us");
@@ -24,11 +22,8 @@ class Temperature extends WeatherData{
 }
 
 class Precipitation extends WeatherData{
-    constructor(value,ptype,mm,inch){
+    constructor(value){
         super(value)
-        this.ptype = ptype
-        this.mm = mm 
-        this.inch = inch
     }
     precipitationType(ptype){this.ptype = ptype}
     convertToInches(){
@@ -80,16 +75,43 @@ class CloudCoverage extends WeatherData {
 
 //WeatherPrediction Inharitance
 class WeatherPrediction extends DataType , Event{
-    matches(data){return this.data}
+    constructor(fromValue, toValue, event, dataType){
+        super();
+        this.fromValue = fromValue;
+        this.toValue = toValue;
+        this.event = event;
+        this.dataType = dataType;
+    };
+    matches(weatherData){
+        if(weatherData.value() > this.fromValue && weatherData.value() < this.toValue){
+            console.log(weatherData.value() + " matches the interval prediction between " + this.fromValue + " and " + this.toValue)
+        }
+        else return false;
+    }
 }
 
 class TemperaturePrediction extends WeatherPrediction{
-    //Questionable
-    constructor(C) {
-        super()
-        this.C = C}
-    getPrediction() {return this.C}
-    setPrediction(C) {this.C = C}
+    constructor() {
+        super();
+    }
+    convertToF(){
+        if(this.unit() !== "us"){
+            this.setUnit("us");
+            const tempFrom = this.from() * 9/5 + 32;
+            const tempTo = this.to() * 9/5 + 32;
+            console.log("The temperature prediction in Fahrenheit is between " + tempFrom + " and " + tempTo);
+        }
+        else console.log("Invalid unit type")
+    }
+    convertToC(){
+        if(this.unit() !== "international"){
+            this.setUnit("international");
+            const tempFrom = (this.from() - 32) * 5/9;
+            const tempTo = (this.to() - 32) * 5/9;
+            console.log("The temperature prediction in Celsius is between " + tempFrom + " and " + tempTo);
+        }
+        else console.log("Invalid unit type")
+    }
 }
 
 class PrecipitationPrediction extends WeatherPrediction{
@@ -100,9 +122,27 @@ class PrecipitationPrediction extends WeatherPrediction{
         this.inch = inch
     }
     types() {return this.type}
-    matches(data) {this.data = data}
-    converToInches(mm){return "Convertion mm to inches"+ mm*0.039370}
-    convertToMm(inch){return "Convertion inches to mm" + inch*25.4}
+    matches(data){
+        return this.matches(data.value())
+    }
+    convertToInches(){
+        if(this.unit() !== "us"){
+            this.setUnit("us");
+            const inchesFrom = this.from() / 25.4;
+            const inchesTo = this.to() / 25.4;
+            console.log("The precipitation prediction in inches is " + inchesFrom + " and " + inchesTo);
+        }
+        else { console.log("Invalid unit type")}
+    }
+    convertToMM(){
+        if(this.unit() !== "international"){
+            this.setUnit("international");
+            const mmFrom = this.from() * 25.4;
+            const mmTo = this.to() * 25.4;
+            console.log("The precipitation prediction in mm is " + mmFrom + " and " + mmTo);
+        }
+        else { console.log("Invalid unit type")}
+    }
 }
 
 class WindPrediction extends WeatherPrediction{
@@ -123,12 +163,31 @@ class WindPrediction extends WeatherPrediction{
         this.E = E
     }
     matches (data) {this.data = data}
-    convertToMPH(km){return "Convention KM to MPH"+ km*0.6213711922}
-    convertToMS(MPH){return "Convention MPH to MS" + MPH/2.2369}
+    convertToMPH(){
+        if(this.unit() !== "us"){
+            this.setUnit("us")
+            const mphFrom = this.from() * 2.2369
+            const mphTo = this.to() * 2.2369
+            console.log("The wind speed prediction in mph is " + mphFrom + " and " + mphTo)
+        }
+        else { console.log("Invalid unit type")}
+    }
+    convertToMS(){
+        if(this.unit() !== "international"){
+            this.setUnit("international")
+            const msFrom = this.from() / 2.2369
+            const msTo = this.to() / 2.2369
+            console.log("The wind speed prediction in ms is " + msFrom + " and " + msTo)
+        }
+        else { console.log("Invalid unit type")}
+    }
 }
 
 class CloudCoveragePrediction extends WeatherPrediction{
     constructor(value){super(value)}
+    coverage() {
+        console.log("Cloud coverage is: " + value + "%" + ", and the prediction was from: " + this.from()+ "%" + ", to: " + this.to() + "%");
+    }
 }
 
 //WeatherFOrecast Class
@@ -188,7 +247,36 @@ class WeatherForecast{
         })
     }
     data() {
-
+        let result  = null;
+        if(this.place !== null){
+            result = this.data.filter(d => d.place() === this.place);
+        }
+        if(this.type !== null && result !== null) {
+            result = result.filter(d => d.type() === this.type);
+        }
+        else if(this.type !== null) {
+            result = this.data.filter(d => d.type() === this.type);
+        }
+        if(this.period !== null && result !== null) {
+            result = result.map(d => {
+                if(this.period.contains(d.time())){
+                    return d;
+                }
+            });
+        }
+        else if(this.period !== null) {
+            result = this.data.filter(d => {
+                if(this.period.contains(d.time())){
+                    return d;
+                }
+            });
+        }
+        if (result === null) {
+            result = this.data;
+        }
+        result.forEach(d => {
+            console.log(d.time() + " " + d.type() + " ");
+        });
     }
 }
 

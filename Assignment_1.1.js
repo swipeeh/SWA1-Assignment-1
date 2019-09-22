@@ -51,19 +51,19 @@ function WeatherPrediction(fromValue, toValue, event, dataType){
 
 function TemperaturePrediction(weatherPrediction) {
     function convertToF(){
-        if(weatherPrediction.unit() != "us"){
+        if(weatherPrediction.unit() !== "us"){
             weatherPrediction.setUnit("us")
-        tempFrom = weatherPrediction.from() * 9/5 + 32
-        tempTo = weatherPrediction.to() * 9/5 + 32
+        const tempFrom = weatherPrediction.from() * 9/5 + 32
+        const tempTo = weatherPrediction.to() * 9/5 + 32
         console.log("The temperature prediction in Fahrenheit is between " + tempFrom + " and " + tempTo)
     }
         else console.log("Invalid unit type")
     }
     function convertToC(){
-        if(weatherPrediction.unit() != "international"){
+        if(weatherPrediction.unit() !== "international"){
         weatherPrediction.setUnit("international")
-        tempFrom = (weatherPrediction.from() - 32) * 5/9
-        tempTo = (weatherPrediction.to() - 32) * 5/9
+        const tempFrom = (weatherPrediction.from() - 32) * 5/9
+        const tempTo = (weatherPrediction.to() - 32) * 5/9
         console.log("The temperature prediction in Celsius is between " + tempFrom + " and " + tempTo)
         }
         else console.log("Invalid unit type")
@@ -77,24 +77,24 @@ function PrecipitationPrediction(weatherPrediction, pTypes) {
         return pTypes
     }
 
-    function matches(){
+    function matches(data){
         return weatherPrediction.matches(data.value())
     }
     function convertToInches(){
-        if(weatherPrediction.unit() != "us"){
+        if(weatherPrediction.unit() !== "us"){
             weatherPrediction.setUnit("us")
-            inchesFrom = weatherPrediction.from() / 25.4
-            inchesTo = weatherPrediction.to() / 25.4
+            const inchesFrom = weatherPrediction.from() / 25.4
+            const inchesTo = weatherPrediction.to() / 25.4
             console.log("The precipitation prediction in inches is " + inchesFrom + " and " + inchesTo)
         }
         else { console.log("Invalid unit type")}
     }
     function convertToMM(){
-        if(weatherPrediction.unit() != "international"){
+        if(weatherPrediction.unit() !== "international"){
             weatherPrediction.setUnit("international")
-            mmFrom = weatherPrediction.from() * 25.4
-            mmTo = weatherPrediction.to() * 25.4
-            console.log("The precipitation prediction in mm is " + inchesFrom + " and " + inchesTo)
+            const mmFrom = weatherPrediction.from() * 25.4
+            const mmTo = weatherPrediction.to() * 25.4
+            console.log("The precipitation prediction in mm is " + mmFrom + " and " + mmTo)
         }
         else { console.log("Invalid unit type")}
     }
@@ -111,20 +111,20 @@ function WindPrediction(wDirections , weatherPrediction) {
         return weatherPrediction.matches(data.value())
     }
     function convertToMPH(){
-        if(weatherPrediction.unit() != "us"){
+        if(weatherPrediction.unit() !== "us"){
             weatherPrediction.setUnit("us")
-            mphFrom = weatherPrediction.from() * 2.2369
-            mphTo = weatherPrediction.to() * 2.2369
+            const mphFrom = weatherPrediction.from() * 2.2369
+            const mphTo = weatherPrediction.to() * 2.2369
             console.log("The wind speed prediction in mph is " + mphFrom + " and " + mphTo)
         }
         else { console.log("Invalid unit type")}
     }
 
     function convertToMS(){
-        if(weatherPrediction.unit() != "international"){
+        if(weatherPrediction.unit() !== "international"){
             weatherPrediction.setUnit("international")
-            msFrom = weatherPrediction.from() / 2.2369
-            msTo = weatherPrediction.to() / 2.2369
+            const msFrom = weatherPrediction.from() / 2.2369
+            const msTo = weatherPrediction.to() / 2.2369
             console.log("The wind speed prediction in ms is " + msFrom + " and " + msTo)
         }
         else { console.log("Invalid unit type")}
