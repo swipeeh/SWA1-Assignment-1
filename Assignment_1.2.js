@@ -1,65 +1,71 @@
 //WeatherData Inharitance
-class WeatherData{
-    constructor(value){
+class WeatherData {
+    constructor(value) {
         this.value = value
+    }
+    value() {
+        return this.value;
+    }
+    setValue(newValue) {
+        this.value = newValue;
     }
 }
 
-class Temperature extends WeatherData{
-    constructor(value,F,C){
+class Temperature extends WeatherData {
+    constructor(value, F, C) {
         super(value)
         this.F = F
         this.C = C
     }
-    convertToF(){
+    convertToF() {
         this.setUnit("us");
-        const f = this.value() * 9/5 + 32;
+        const F = this.value() * 9 / 5 + 32;
         this.setValue(f);
     }
-    convertToC(){
+    convertToC() {
         this.setUnit("international");
-        const c = (this.value() - 32) * 5/9;
-        this.setValue(c);
+        const C = (this.value() - 32) * 5 / 9;
+        this.setValue(C);
     }
 }
 
-class Precipitation extends WeatherData{
-    constructor(value,ptype,mm,inch){
+class Precipitation extends WeatherData {
+    constructor(value, ptype, mm, inch) {
         super(value)
         this.ptype = ptype
-        this.mm = mm 
+        this.mm = mm
         this.inch = inch
     }
-    precipitationType(ptype){this.ptype = ptype}
-    convertToInches(){
+    precipitationType(ptype) { this.ptype = ptype }
+    convertToInches() {
         this.setUnit("us");
         const inches = this.value() * 25.4;
         this.setValue(inches);
     }
-    convertToMm(){
+    convertToMm() {
         this.setUnit("international");
-        const mm = this.value()/25.4;
+        const mm = this.value() / 25.4;
         this.setValue(mm);
     }
 }
 
-class Wind extends WeatherData{
-    constructor(value,N,W,S,E,km,MPH){
+class Wind extends WeatherData {
+    constructor(value, N, W, S, E, km, MPH) {
         super(value)
         this.N = N
         this.W = W
         this.S = S
-        this.E = E  
+        this.E = E
         this.km = km
         this.MPH = MPH
     }
-    direction(N,W,S,E){
+    direction(N, W, S, E) {
         this.N = N
         this.W = W
         this.S = S
         this.E = E
     }
-    convertToMPH(){
+    convertToMPH() {
         this.setUnit("us");
         const mph = this.value() * 2.2369;
         this.setValue(mph);
@@ -72,68 +78,112 @@ class Wind extends WeatherData{
 }
 
 class CloudCoverage extends WeatherData {
-    constructor(value){super(value)}
+    constructor(value) { super(value) }
     getCoverage() {
         return value;
     }
 }
 
 //WeatherPrediction Inharitance
-class WeatherPrediction extends DataType , Event{
-    matches(data){return this.data}
+class WeatherPrediction extends DataType, Event {
+    matches(weatherData) {
+        if (weatherData.value() > fromValue && weatherData.value() < toValue) {
+            console.log(weatherData.value() + " matches the interval prediction between " + fromValue + " and " + toValue)
+        }
+        else return false;
+    }
+    from() { return fromValue }
+    to() { return toValue }
 }
 
-class TemperaturePrediction extends WeatherPrediction{
-    //Questionable
-    constructor(C) {
-        super()
-        this.C = C}
-    getPrediction() {return this.C}
-    setPrediction(C) {this.C = C}
+class TemperaturePrediction extends WeatherPrediction {
+    constructor(value, F, C) {
+        super(value)
+        this.F = F
+        this.C = C
+    }
+    convertToF() {
+        this.setUnit("us");
+        const f = this.value() * 9 / 5 + 32;
+        this.setValue(f);
+    }
+    convertToC() {
+        this.setUnit("international");
+        const c = (this.value() - 32) * 5 / 9;
+        this.setValue(c);
+    }
 }
 
-class PrecipitationPrediction extends WeatherPrediction{
-    constructor(value,type,mm,inch){
-        super()
-        this.type = type 
+class PrecipitationPrediction extends WeatherPrediction {
+    constructor(value, type, mm, inch) {
+        super(value)
+        this.type = type
         this.mm = mm
         this.inch = inch
     }
-    types() {return this.type}
-    matches(data) {this.data = data}
-    converToInches(mm){return "Convertion mm to inches"+ mm*0.039370}
-    convertToMm(inch){return "Convertion inches to mm" + inch*25.4}
+    types() { return this.type }
+    matches(weatherData) {
+        if (weatherData.value() > fromValue && weatherData.value() < toValue) {
+            console.log(weatherData.value() + " matches the interval prediction between " + fromValue + " and " + toValue)
+        }
+        else return false;
+    }
+    convertToInches() {
+        this.setUnit("us");
+        const inches = this.value() * 25.4;
+        this.setValue(inches);
+    }
+    convertToMm() {
+        this.setUnit("international");
+        const mm = this.value() / 25.4;
+        this.setValue(mm);
+    }
 }
 
-class WindPrediction extends WeatherPrediction{
-    constructor(value,data,N,W,S,E,km,MPH){
+class WindPrediction extends WeatherPrediction {
+    constructor(value, data, N, W, S, E, km, MPH) {
         super(value)
         this.data = data
         this.N = N
         this.W = W
         this.S = S
-        this.E = E  
+        this.E = E
         this.km = km
         this.MPH = MPH
     }
-    direction(N,W,S,E){
+    direction(N, W, S, E) {
         this.N = N
         this.W = W
         this.S = S
         this.E = E
     }
-    matches (data) {this.data = data}
-    convertToMPH(km){return "Convention KM to MPH"+ km*0.6213711922}
-    convertToMS(MPH){return "Convention MPH to MS" + MPH/2.2369}
+    matches(weatherData) {
+        if (weatherData.value() > fromValue && weatherData.value() < toValue) {
+            console.log(weatherData.value() + " matches the interval prediction between " + fromValue + " and " + toValue)
+        }
+        else return false;
+    }
+    convertToMPH() {
+        this.setUnit("us");
+        const mph = this.value() * 2.2369;
+        this.setValue(mph);
+    }
+    convertToMS() {
+        this.setUnit("international");
+        const ms = this.value() / 2.2369;
+        this.setValue(ms);
+    }
 }
-
-class CloudCoveragePrediction extends WeatherPrediction{
-    constructor(value){super(value)}
+class CloudCoveragePrediction extends WeatherPrediction {
+    constructor(value) { super(value) }
+    getCoverage() {
+        return value;
+    }
 }
 
 //WeatherFOrecast Class
-class WeatherForecast{
-    constructor(){
+class WeatherForecast {
+    constructor() {
         this.currentData = null;
         this.place = null;
         this.type = null;
@@ -146,18 +196,18 @@ class WeatherForecast{
         });
         this.data = data
     }
-    getCurrentPlace() {return this.place}
-    setCurrentPlace(place) {this.place = place}
-    clearCurrentPlace() {this.place = null}
-    getCurrentType() {return this.type}
-    setCurrentType(type) {this.type = type}
-    clearCurrentType() {this.type = null}
-    getCurrentPeriod() {return this.period}
-    setCurrentPeriod(newPeriod) {this.period = newPeriod}
-    clearCurrentPeriod() {this.period = null}
+    getCurrentPlace() { return this.place }
+    setCurrentPlace(place) { this.place = place }
+    clearCurrentPlace() { this.place = null }
+    getCurrentType() { return this.type }
+    setCurrentType(type) { this.type = type }
+    clearCurrentType() { this.type = null }
+    getCurrentPeriod() { return this.period }
+    setCurrentPeriod(newPeriod) { this.period = newPeriod }
+    clearCurrentPeriod() { this.period = null }
     convertToUSUnits() {
         this.currentData.forEach(d => {
-            if(d.unit() !== "us")
+            if (d.unit() !== "us")
                 d.setUnit("us");
             switch (d.type()) {
                 case "temperature":
@@ -173,7 +223,7 @@ class WeatherForecast{
     }
     convertToInternationalUnits() {
         this.currentData.forEach(d => {
-            if(d.unit() !== "international")
+            if (d.unit() !== "international")
                 d.setUnit("international");
             switch (d.type()) {
                 case "temperature":
@@ -193,7 +243,7 @@ class WeatherForecast{
 }
 
 //WeatherHistory
-class WeatherHistory{
+class WeatherHistory {
     constructor() {
         this.currentData = null;
         this.currentPlace = null;
@@ -205,7 +255,6 @@ class WeatherHistory{
     WeatherReport() {
         this.currentData.forEach(d => {
             const date = d.time();
-
             console.log("On the date " + date.getDate() + " of the " + this.namesOfMonths[date.getMonth()] + " following data was measured: " + d.type() + " with value of " + d.value() + " in the " + d.unit() + " units.");
         });
     }
@@ -238,7 +287,7 @@ class WeatherHistory{
     }
     convertToUSUnits() {
         this.currentData.forEach(d => {
-            if(d.unit() !== "us")
+            if (d.unit() !== "us")
                 d.setUnit("us");
             switch (d.type()) {
                 case "temperature":
@@ -254,7 +303,7 @@ class WeatherHistory{
     }
     convertToInternationalUnits() {
         this.currentData.forEach(d => {
-            if(d.unit() !== "international")
+            if (d.unit() !== "international")
                 d.setUnit("international");
             switch (d.type()) {
                 case "temperature":
@@ -269,7 +318,7 @@ class WeatherHistory{
         })
     }
     add(data) {
-        if(this.currentData === null) {
+        if (this.currentData === null) {
             this.currentData = data;
         }
         else {
@@ -277,26 +326,26 @@ class WeatherHistory{
         }
     }
     data() {
-        let result  = null;
-        if(this.currentPlace !== null){
+        let result = null;
+        if (this.currentPlace !== null) {
             result = this.currentData.filter(d => d.place() === this.currentPlace);
         }
-        if(this.currentType !== null && result !== null) {
+        if (this.currentType !== null && result !== null) {
             result = result.filter(d => d.type() === this.currentType);
         }
-        else if(this.currentType !== null) {
+        else if (this.currentType !== null) {
             result = this.currentData.filter(d => d.type() === this.currentType);
         }
-        if(this.currentPeriod !== null && result !== null) {
+        if (this.currentPeriod !== null && result !== null) {
             result = result.map(d => {
-                if(this.currentPeriod.contains(d.time())){
+                if (this.currentPeriod.contains(d.time())) {
                     return d;
                 }
             });
         }
-        else if(this.currentPeriod !== null) {
+        else if (this.currentPeriod !== null) {
             result = this.currentData.filter(d => {
-                if(this.currentPeriod.contains(d.time())){
+                if (this.currentPeriod.contains(d.time())) {
                     return d;
                 }
             });
@@ -310,26 +359,26 @@ class WeatherHistory{
     }
 }
 //super classes for weatherdata and weatherprediction
-class DataType{
-    constructor(type, unit){
+class DataType {
+    constructor(type, unit) {
         this.type = type
         this.unit = unit
     }
-    setTime(time){this.time = time}
-    getTime(){return this.time}
-    setUnit(unit){this.unit = unit}
-    getUnit(){return this.unit}
+    setTime(time) { this.time = time }
+    getTime() { return this.time }
+    setUnit(unit) { this.unit = unit }
+    getUnit() { return this.unit }
 }
 
-class Event{
-    constructor(time,place){
+class Event {
+    constructor(time, place) {
         this.time = time
         this.place = place
     }
-    setTime(time){this.time = time}
-    getTime(){return this.time}
-    setPlace(place){this.place = place}
-    getPlace(){return this.place}
+    setTime(time) { this.time = time }
+    getTime() { return this.time }
+    setPlace(place) { this.place = place }
+    getPlace() { return this.place }
 }
 
 class DateInterval {
