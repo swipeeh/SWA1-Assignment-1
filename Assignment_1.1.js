@@ -31,7 +31,7 @@ function DateInterval(fromDate, toDate) {
         return false;
     }
     return { from, to, contains }
-};
+}
 
 function WeatherPrediction(fromValue, toValue, event, dataType) {
     function matches(weatherData) {
@@ -47,7 +47,7 @@ function WeatherPrediction(fromValue, toValue, event, dataType) {
         return toValue;
     }
     return Object.assign({}, event, dataType, { matches, from, to })
-};
+}
 
 function TemperaturePrediction(weatherPrediction) {
     function convertToF() {
@@ -69,7 +69,7 @@ function TemperaturePrediction(weatherPrediction) {
         else console.log("Invalid unit type")
     }
     return Object.assign({}, weatherPrediction, { convertToF, convertToC })
-};
+}
 
 function PrecipitationPrediction(weatherPrediction, pTypes) {
 
@@ -99,7 +99,7 @@ function PrecipitationPrediction(weatherPrediction, pTypes) {
         else { console.log("Invalid unit type") }
     }
     return Object.assign({}, weatherPrediction, { types, matches, convertToInches, convertToMM })
-};
+}
 
 function WindPrediction(wDirections, weatherPrediction) {
 
@@ -130,14 +130,14 @@ function WindPrediction(wDirections, weatherPrediction) {
         else { console.log("Invalid unit type") }
     }
     return Object.assign({}, weatherPrediction, { directions, matches, convertToMPH, convertToMS })
-};
+}
 
 function CloudCoveragePrediction(weatherPrediction) {
     function coverage() {
         console.log("Cloud coverage is: " + data.value() + "%" + ", and the prediction was from: " + weatherPrediction.from() + "%" + ", to: " + weatherPrediction.to() + "%");
     }
     return Object.assign({}, weatherPrediction, { coverage })
-};
+}
 
 function WeatherHistory() {
 
@@ -450,74 +450,3 @@ function Wind(weatherData, windDirection) {
     }
     return Object.assign({}, weatherData, { direction, convertToMPH, convertToMS });
 }
-
-/*
-let event = Event();
-let dataType = DataType();
-
-let a = WeatherData(50, event, dataType);
-let temp = Temperature(a);
-temp.convertToF();
-
-let from = new Date("1-1-2000");
-let to = new Date("3-1-2000");
-let date = new Date("2-1-2000");
-
-let aaa = DateInterval(from, to);
-console.log(aaa.contains(date));
-*/
-
-let from = new Date("1-1-2000");
-let to = new Date("1-3-2000");
-let interval = DateInterval(from, to);
-let date = new Date("1-2-2000");
-let event = Event(date, "horsens");
-let dataType = DataType("temperature", "international");
-let dataType2 = DataType("wind", "international");
-let dataType3 = DataType("precipitation", "international");
-let weather = WeatherData(30, event, dataType);
-let weather2 = WeatherData(40, event, dataType2);
-let weather3 = WeatherData(80, event, dataType3);
-let temp = Temperature(weather);
-let wind = Wind(weather2, "south");
-let preci = Precipitation(weather3);
-
-//temp.convertToC();
-//temp.convertToF();
-//console.log(temp);
-
-let fin = WeatherHistory("bratislava", "temperature", interval);
-fin.add([temp, wind, preci]);
-//fin.setCurrentPlace("horsens");
-//fin.setCurrentType("temperature");
-fin.setCurrentPeriod(interval);
-fin.data();
-fin.convertToUSUnits();
-fin.convertToInternationalUnits();
-fin.WeatherReport();
-
-
-let from1 = new Date("09-21-2019")
-let to1 = new Date("09-23-2019")
-let interval1 = DateInterval(from1, to1)
-let date1 = new Date("09-22-2019")
-let event1 = Event(date1, "Pernik")
-let dType = DataType("temperature", "international")
-let dType1 = DataType("wind", "international")
-let dType2 = DataType("precipitation", "international")
-let w = WeatherPrediction(25, 35, event1, dType)
-let w1 = WeatherPrediction(35, 45, event1, dType1)
-let w2 = WeatherPrediction(75, 85, event1, dType2)
-let temperature = TemperaturePrediction(w)
-let wnd = WindPrediction(["N", "NW", "NE"], w1)
-let prec = PrecipitationPrediction(w2, ["rain", "snow", "muddy"])
-let forecast = WeatherForecast("pernik", "temperature", interval1)
-
-
-
-forecast.add([temperature, wnd, prec])
-forecast.setCurrentPeriod(interval1)
-forecast.data()
-forecast.weatherForecast()
-forecast.convertToUSUnits()
-w.matches(weather)
