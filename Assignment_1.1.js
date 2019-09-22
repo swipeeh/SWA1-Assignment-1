@@ -33,10 +33,10 @@ function DateInterval(fromDate, toDate) {
     return {from, to, contains}
 };
 
-function WeatherPrediction(fromValue, toValue, weatherData, event, dataType){
-    function matches(){
+function WeatherPrediction(fromValue, toValue, event, dataType){
+    function matches(weatherData){
         if(weatherData.value() > fromValue && weatherData.value() < toValue){
-            return true;
+            console.log(weatherData.value() + " matches the interval prediction between " + fromValue + " and " + toValue)
         }
         else return false;
     }
@@ -46,52 +46,55 @@ function WeatherPrediction(fromValue, toValue, weatherData, event, dataType){
     function to(){
         return toValue;
     }
-    return Object.assign({}, weatherData, event, dataType, {matches, from, to})
+    return Object.assign({}, event, dataType, {matches, from, to})
 };
 
 function TemperaturePrediction(weatherPrediction) {
-    let data = weatherPrediction.weatherData()
-    let type = weatherPrediction.dataType()
-    let event = weatherPrediction.event()
-
     function convertToF(){
-        if(weatherPrediction.matches(value) && type.unit == 'F'){
-        f = data.value() * 9/5 + 32
-        console.log("The temperature in Fahrenheit is" + f)
+        if(weatherPrediction.unit() != 'us'){
+            weatherPrediction.setUnit() === "us"
+        tempFrom = weatherPrediction.from() * 9/5 + 32
+        tempTo = weatherPrediction.to() * 9/5 + 32
+        console.log("The temperature prediction in Fahrenheit is between " + tempFrom + " and " + tempTo)
     }
-        else console.log("Invalid unit type or no value provided for conversion")
+        else console.log("Invalid unit type")
     }
     function convertToC(){
-        if(weatherPrediction.matches(value) && type.unit == 'C'){
-        c = (f - 32) * 5/9
-        console.log("The temperature in Celsius is" + c)
+        if(weatherPrediction.unit() != 'international'){
+        weatherPrediction.setUnit() === "international"
+        tempFrom = (weatherPrediction.from() - 32) * 5/9
+        tempTo = (weatherPrediction.to() - 32) * 5/9
+        console.log("The temperature prediction in Celsius is between " + tempFrom + " and " + tempTo)
         }
-        else console.log("Invalid unit type or no value provided for conversion")
+        else console.log("Invalid unit type")
     }
     return Object.assign({},weatherPrediction, {convertToF, convertToC})
 };
 
-function PrecipitationPrediction(weatherPrediction, pType) {
-    let data = weatherPrediction.weatherData()
-    let type = weatherPrediction.dataType()
-    let event = weatherPrediction.event()
+function PrecipitationPrediction(weatherPrediction, pTypes) {
 
     function types(){
-        return pType
+        return pTypes
     }
 
     function matches(){
-
+        return weatherPrediction.matches(data.value())
     }
     function convertToInches(){
-        if(type.unit() == "inches"){
-            return data.value() / 25.4
+        if(weatherPrediction.unit() != "us"){
+            weatherPrediction.setUnit() === "us"
+            inchesFrom = weatherPrediction.from() / 25.4
+            inchesTo = weatherPrediction.to() / 25.4
+            console.log("The precipitation prediction in inches is " + inchesFrom + " and " + inchesTo)
         }
         else { console.log("Invalid unit type")}
     }
     function convertToMM(){
-        if(type.unit() == "mm"){
-            return data.value() * 25.4
+        if(weatherPrediction.unit() != "international"){
+            weatherPrediction.setUnit() === "international"
+            mmFrom = weatherPrediction.from() * 25.4
+            mmTo = weatherPrediction.to() * 25.4
+            console.log("The precipitation prediction in mm is " + inchesFrom + " and " + inchesTo)
         }
         else { console.log("Invalid unit type")}
     }
@@ -99,27 +102,30 @@ function PrecipitationPrediction(weatherPrediction, pType) {
 };
 
 function WindPrediction(wDirections , weatherPrediction) {
-    let data = weatherPrediction.weatherData()
-    let type = weatherPrediction.dataType()
-    let event = weatherPrediction.event()
 
     function directions(){
         return wDirections
     }
 
     function matches(){
-
+        return weatherPrediction.matches(data.value())
     }
     function convertToMPH(){
-        if(type.unit() == "mph"){
-            return data.value() * 2.2369
+        if(weatherPrediction.unit() != "us"){
+            weatherPrediction.setUnit() === "us"
+            mphFrom = weatherPrediction.from() * 2.2369
+            mphTo = weatherPrediction.to() * 2.2369
+            console.log("The wind speed prediction in mph is " + mphFrom + " and " + mphTo)
         }
         else { console.log("Invalid unit type")}
     }
 
     function convertToMS(){
-        if(type.unit() == "ms"){
-            return data.value() / 2.2369
+        if(weatherPrediction.unit() != "international"){
+            weatherPrediction.setUnit() === "international"
+            msFrom = weatherPrediction.from() / 2.2369
+            msTo = weatherPrediction.to() / 2.2369
+            console.log("The wind speed prediction in ms is " + msFrom + " and " + msTo)
         }
         else { console.log("Invalid unit type")}
     }
@@ -127,11 +133,10 @@ function WindPrediction(wDirections , weatherPrediction) {
 };
 
 function CloudCoveragePrediction (weatherPrediction) {
-    let data = weatherPrediction.weatherData()
     function coverage() {
         console.log("Cloud coverage is: " + data.value() + "%" + ", and the prediction was from: " + weatherPrediction.from()+ "%" + ", to: " + weatherPrediction.to() + "%");
     }
-    return Object.assign({}, weatherData, {coverage})
+    return Object.assign({}, weatherPrediction, {coverage})
 };
 
 function WeatherHistory() {
@@ -253,51 +258,120 @@ function WeatherHistory() {
 }
 
 function WeatherForecast() {
-    return {
-        WeatherReport: function (data) {
+    let currentData = null 
+    let currentPlace = null
+    let currentType = null
+    let currentPeriod = null
+    const namesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+    return {
+        weatherForecast: function () {
+            currentData.forEach(d => {
+                const date = d.time();
+
+                console.log("For " + date.getDate() + " of " + namesOfMonths[date.getMonth()] + " is predicted that " + d.type() + " will be with the value of " + d.from() + " to " + d.to() + " in the " + d.unit() + " units")
+            });
         },
         getCurrentPlace: function () {
-
+            return currentPlace;
         },
-        setCurrentPlace: function (place) {
-
+        setCurrentPlace: function (newPlace) {
+            currentPlace = newPlace;
         },
         clearCurrentPlace: function () {
-
+            currentPlace = null;
         },
         getCurrentType: function () {
-
+            return currentType;
         },
-        setCurrentType: function () {
-
+        setCurrentType: function (newType) {
+            currentType = newType;
         },
         clearCurrentType: function () {
-
+            currentType = null;
         },
         getCurrentPeriod: function () {
-
+            return currentPeriod;
         },
-        setCurrentPeriod: function () {
-
+        setCurrentPeriod: function (newPeriod) {
+            currentPeriod = newPeriod;
         },
         clearCurrentPeriod: function () {
-
+            currentPeriod = null;
         },
         convertToUSUnits: function () {
-
+            currentData.forEach(d => {
+                if(d.unit() !== "us")
+                d.setUnit("us");
+                switch (d.type()) {
+                    case "temperature":
+                        d.convertToF();
+                        break;
+                    case "precipitation":
+                        d.convertToInches();
+                        break;
+                    case "wind":
+                        d.convertToMPH();
+                }
+            });
         },
         convertToInternationalUnits: function () {
-
+            currentData.forEach(d => {
+                if(d.unit() !== "international")
+                d.setUnit("international");
+                switch (d.type()) {
+                    case "temperature":
+                        d.convertToC();
+                        break;
+                    case "precipitation":
+                        d.convertToMm();
+                        break;
+                    case "wind":
+                        d.convertToMS();
+                }
+            })
         },
         add: function (data) {
-
+            if(currentData === null) {
+                currentData = data;
+            }
+            else {
+                currentData = Array.concat(currentData, data);
+            }
         },
         data: function () {
-
+            let result  = null;
+            if(currentPlace !== null){
+                result = currentData.filter(d => d.place() === currentPlace);
+            }
+            if(currentType !== null && result !== null) {
+                result = result.filter(d => d.type() === currentType);
+            }
+            else if(currentType !== null) {
+                result = currentData.filter(d => d.type() === currentType);
+            }
+            if(currentPeriod !== null && result !== null) {
+                result = result.map(d => {
+                    if(currentPeriod.contains(d.time())){
+                        return d;
+                    }
+                });
+            }
+            else if(currentPeriod !== null) {
+                result = currentData.filter(d => {
+                    if(currentPeriod.contains(d.time())){
+                        return d;
+                    }
+                });
+            }
+            if (result === null) {
+                result = currentData;
+            }
+            result.forEach(d => {
+                console.log(d.time() + " " + d.type() + " ");
+            });
         }
-    }
-}
+    }}
 
 function Event(date, placeValue){
     function time(){
@@ -373,7 +447,7 @@ function Wind(weatherData, windDirection){
         weatherData.setValue(ms);
         //console.log(mph + "miles per hour = " + ms + "meters per second")
     }
-    return Object.assign({}, weatherData, {windDirection, convertToMPH, convertToMS});
+    return Object.assign({}, weatherData, {direction, convertToMPH, convertToMS});
 }
 
 /*
@@ -416,7 +490,33 @@ fin.add([temp,wind,preci]);
 //fin.setCurrentPlace("horsens");
 //fin.setCurrentType("temperature");
 fin.setCurrentPeriod(interval);
-//fin.data();
+fin.data();
 fin.convertToUSUnits();
 fin.convertToInternationalUnits();
 fin.WeatherReport();
+
+
+let from1 = new Date("09-21-2019")
+let to1 = new Date("09-23-2019")
+let interval1 = DateInterval(from1, to1)
+let date1 = new Date("09-22-2019")
+let event1 = Event(date1, "Pernik")
+let dType = DataType("temperature", "international")
+let dType1 = DataType("wind", "international")
+let dType2 = DataType("precipitation", "international")
+let w = WeatherPrediction(25,35, event1, dType)
+let w1 = WeatherPrediction(35,45, event1, dType1)
+let w2 = WeatherPrediction(75,85, event1, dType2)
+let temperature = TemperaturePrediction(w)
+let wnd = WindPrediction(["N", "NW", "NE"], w1)
+let prec = PrecipitationPrediction(w2, ["rain", "snow", "muddy"])
+let forecast = WeatherForecast("pernik", "temperature", interval1)
+
+
+
+forecast.add([temperature,wnd,prec])
+forecast.setCurrentPeriod(interval1)
+forecast.data()
+forecast.weatherForecast()
+forecast.convertToUSUnits()
+w.matches(weather)
