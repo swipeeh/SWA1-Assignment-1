@@ -139,7 +139,13 @@ class WeatherForecast{
         this.type = null;
         this.period = null;
     }
-    WeatherReport(data) {this.data = data}
+    WeatherReport(data) {
+        data.forEach(d => {
+            const date = d.time();
+            console.log("Prediction for the date " + date.getDate() + " of the " + namesOfMonths[date.getMonth()] + " in category " + d.type() + " is from " + d.from() + " to " + d.to() + " " + d.unit() + " units.");
+        });
+        this.data = data
+    }
     getCurrentPlace() {return this.place}
     setCurrentPlace(place) {this.place = place}
     clearCurrentPlace() {this.place = null}
