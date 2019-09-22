@@ -51,8 +51,8 @@ function WeatherPrediction(fromValue, toValue, event, dataType){
 
 function TemperaturePrediction(weatherPrediction) {
     function convertToF(){
-        if(weatherPrediction.unit() != 'us'){
-            weatherPrediction.setUnit() === "us"
+        if(weatherPrediction.unit() != "us"){
+            weatherPrediction.setUnit("us")
         tempFrom = weatherPrediction.from() * 9/5 + 32
         tempTo = weatherPrediction.to() * 9/5 + 32
         console.log("The temperature prediction in Fahrenheit is between " + tempFrom + " and " + tempTo)
@@ -60,8 +60,8 @@ function TemperaturePrediction(weatherPrediction) {
         else console.log("Invalid unit type")
     }
     function convertToC(){
-        if(weatherPrediction.unit() != 'international'){
-        weatherPrediction.setUnit() === "international"
+        if(weatherPrediction.unit() != "international"){
+        weatherPrediction.setUnit("international")
         tempFrom = (weatherPrediction.from() - 32) * 5/9
         tempTo = (weatherPrediction.to() - 32) * 5/9
         console.log("The temperature prediction in Celsius is between " + tempFrom + " and " + tempTo)
@@ -82,7 +82,7 @@ function PrecipitationPrediction(weatherPrediction, pTypes) {
     }
     function convertToInches(){
         if(weatherPrediction.unit() != "us"){
-            weatherPrediction.setUnit() === "us"
+            weatherPrediction.setUnit("us")
             inchesFrom = weatherPrediction.from() / 25.4
             inchesTo = weatherPrediction.to() / 25.4
             console.log("The precipitation prediction in inches is " + inchesFrom + " and " + inchesTo)
@@ -91,7 +91,7 @@ function PrecipitationPrediction(weatherPrediction, pTypes) {
     }
     function convertToMM(){
         if(weatherPrediction.unit() != "international"){
-            weatherPrediction.setUnit() === "international"
+            weatherPrediction.setUnit("international")
             mmFrom = weatherPrediction.from() * 25.4
             mmTo = weatherPrediction.to() * 25.4
             console.log("The precipitation prediction in mm is " + inchesFrom + " and " + inchesTo)
@@ -112,7 +112,7 @@ function WindPrediction(wDirections , weatherPrediction) {
     }
     function convertToMPH(){
         if(weatherPrediction.unit() != "us"){
-            weatherPrediction.setUnit() === "us"
+            weatherPrediction.setUnit("us")
             mphFrom = weatherPrediction.from() * 2.2369
             mphTo = weatherPrediction.to() * 2.2369
             console.log("The wind speed prediction in mph is " + mphFrom + " and " + mphTo)
@@ -122,7 +122,7 @@ function WindPrediction(wDirections , weatherPrediction) {
 
     function convertToMS(){
         if(weatherPrediction.unit() != "international"){
-            weatherPrediction.setUnit() === "international"
+            weatherPrediction.setUnit("international")
             msFrom = weatherPrediction.from() / 2.2369
             msTo = weatherPrediction.to() / 2.2369
             console.log("The wind speed prediction in ms is " + msFrom + " and " + msTo)
